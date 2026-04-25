@@ -1,0 +1,42 @@
+{
+  "profile": {
+    "name": "Jane Doe",
+    "alias": "CYBER_NINJA",
+    "tagline": "Active Session: SECURITY_ENGINEER",
+    "bioLines": [
+      "> I design and deploy secure infrastructure.",
+      "> Building enterprise platforms across AWS.",
+      "> Integrating security pipelines for production."
+    ],
+    "location": "Berlin, Germany",
+    "phone": "+49 123456789",
+    "email": "jane.doe@example.com",
+    "linkedinUrl": "https://www.linkedin.com/in/janedoe/"
+  },
+  "clients": [
+    { "name": "Example Corp", "domain": "example.com", "logoUrl": "https://www.google.com/s2/favicons?domain=example.com&sz=128" }
+  ],
+  "skills": [
+    { "title": "Languages", "skills": ["Python", "Go", "Bash"] },
+    { "title": "Cloud & DevOps", "skills": ["AWS", "Docker", "Kubernetes"] }
+  ],
+  "experience": [
+    {
+      "company": "SecureTech Inc",
+      "role": "Security Engineer",
+      "duration": "01/2023 - Present",
+      "description": [
+        "Implemented zero-trust architecture.",
+        "Reduced incident response time by 50%."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Technology",
+      "degree": "B.S. Computer Science",
+      "duration": "2018 - 2022",
+      "details": "Graduated with honors."
+    }
+  ]
+}
