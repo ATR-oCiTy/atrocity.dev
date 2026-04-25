@@ -9,3 +9,4 @@ EASTER_EGGS.md
 .venv/
 __pycache__/
 backend/src/data/seed-data.json
+SECURITY.md
