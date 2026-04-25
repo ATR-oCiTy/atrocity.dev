@@ -6,7 +6,6 @@ export interface IProfile extends Document {
   tagline: string;
   bioLines: string[];
   location: string;
-  phone: string;
   email: string;
   linkedinUrl: string;
 }
@@ -17,7 +16,6 @@ const ProfileSchema: Schema = new Schema({
   tagline: { type: String, required: true },
   bioLines: { type: [String], required: true },
   location: { type: String, required: true },
-  phone: { type: String, required: true },
   email: { type: String, required: true },
   linkedinUrl: { type: String, required: true },
 }, { timestamps: true });

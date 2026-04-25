@@ -20,7 +20,6 @@ export interface Profile {
   tagline: string;
   bioLines: string[];
   location: string;
-  phone: string;
   email: string;
   linkedinUrl: string;
 }
