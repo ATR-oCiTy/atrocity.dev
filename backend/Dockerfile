@@ -16,5 +16,8 @@ RUN npm run build
 
 EXPOSE 3000
 
+# Run as non-root user for security
+USER node
+
 # Start server
 CMD ["node", "dist/server.js"]

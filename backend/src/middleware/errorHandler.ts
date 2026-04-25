@@ -16,9 +16,14 @@ export const errorHandler = (
   _next: NextFunction
 ): void => {
   const statusCode = err.statusCode ?? 500;
-  const message = err.message ?? 'Internal Server Error';
+  
+  // Mask 500 error details in production to prevent information leakage
+  const isProduction = process.env.NODE_ENV === 'production';
+  const message = (statusCode === 500 && isProduction) 
+    ? 'Internal Server Error' 
+    : (err.message ?? 'Internal Server Error');
 
-  console.error(`[Error] ${req.method} ${req.path} → ${statusCode}: ${message}`);
+  console.error(`[Error] ${req.method} ${req.path} → ${statusCode}: ${err.message || 'No details'}`);
 
   res.status(statusCode).json({
     error: {
