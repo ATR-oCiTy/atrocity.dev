@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, Briefcase, GraduationCap, MapPin, Code2, Terminal, X, Minus, Maximize2, Shield } from 'lucide-react';
+import { Mail, ChevronRight, Briefcase, GraduationCap, MapPin, Code2, Terminal, X, Minus, Maximize2, Shield } from 'lucide-react';
 import { useMousePosition } from './hooks/useMousePosition';
 import { usePortfolioData } from './hooks/usePortfolioData';
 import { useContactForm } from './hooks/useContactForm';
@@ -372,7 +372,8 @@ function App() {
                       <div className="flex flex-col md:flex-row gap-10 items-start justify-center">
                         <div className="flex flex-col gap-6 text-left border-l-2 border-[#ff003c] pl-6">
                           {[
-                            { icon: MapPin, label: 'GEO', value: profile.location }
+                            { icon: MapPin, label: 'GEO', value: profile.location },
+                            { icon: Mail, label: 'PING', value: profile.email }
                           ].map((info, idx) => (
                             <motion.div key={idx} whileHover={{ x: 10 }} className="flex items-center gap-5 text-gray-300 group cursor-default">
                               <div className="w-10 h-10 bg-black flex items-center justify-center border border-[#ff003c] group-hover:bg-[#ff003c] transition-colors shadow-[0_0_10px_rgba(255,0,60,0.2)]">
