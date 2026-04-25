@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: portfolio_mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - portfolio_net
+
+  backend:
+    build:
+      context: ./backend
+    container_name: portfolio_backend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - MONGO_URI=mongodb://mongodb:27017/portfolio
+      - GMAIL_USER=${GMAIL_USER}
+      - GMAIL_APP_PASSWORD=${GMAIL_APP_PASSWORD}
+    depends_on:
+      - mongodb
+    networks:
+      - portfolio_net
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: portfolio_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks:
+      - portfolio_net
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared_tunnel
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      - frontend
+    networks:
+      - portfolio_net
+
+volumes:
+  mongo_data:
+
+networks:
+  portfolio_net:
+    driver: bridge

@@ -1,0 +1,11 @@
+node_modules/
+.env
+.env.*
+!.env.example
+dist/
+build/
+.DS_Store
+EASTER_EGGS.md
+.venv/
+__pycache__/
+backend/src/data/seed-data.json
