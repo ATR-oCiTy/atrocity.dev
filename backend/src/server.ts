@@ -18,7 +18,14 @@ const app = express();
 app.set('trust proxy', 1);
 
 // Middleware
-app.use(cors());
+// Restrict CORS to the actual frontend domain and localhost for dev
+app.use(cors({
+  origin: config.nodeEnv === 'production' 
+    ? ['https://atrocity.dev', 'https://www.atrocity.dev'] 
+    : ['http://localhost:5173', 'http://localhost:3000'],
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
 app.use(helmet());
 app.use(express.json());
 
