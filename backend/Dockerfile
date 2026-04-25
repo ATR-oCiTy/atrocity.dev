@@ -11,8 +11,8 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Compile TypeScript
-RUN npx tsc
+# Build the application (compiles TS and copies data files)
+RUN npm run build
 
 EXPOSE 3000
 
