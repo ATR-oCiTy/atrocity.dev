@@ -1,0 +1,30 @@
+# ╔══════════════════════════════════════════════════════╗
+# ║  You checked robots.txt. Smart.                      ║
+# ║  Most visitors never look here. You're not most.     ║
+# ║                                                      ║
+# ║  Since you clearly know what you're doing,           ║
+# ║  here's a map to the hidden systems:                 ║
+# ║                                                      ║
+# ║  [1] There's a terminal at the bottom of the page.   ║
+# ║      Type 'help' to start. Then go deeper.           ║
+# ║  [2] Some keyboard sequences unlock things.          ║
+# ║      Think retro gaming.                             ║
+# ║  [3] The logo has a hidden mode.                     ║
+# ║      It takes 3 fast clicks to activate.             ║
+# ║  [4] View the page source. HTML comments talk.       ║
+# ║  [5] Open DevTools console. We left a message.       ║
+# ║  [6] Try: nmap, sudo rm -rf /, hack this             ║
+# ║  [7] One command unlocks a classified dossier.       ║
+# ║                                                      ║
+# ║  Total easter eggs: 11. Good hunting.                ║
+# ╚══════════════════════════════════════════════════════╝
+
+User-agent: *
+Disallow: /classified/
+Disallow: /breach/
+Disallow: /red-team/
+Disallow: /admin/
+Allow: /
+
+Sitemap: https://ashley.portfolio/sitemap.xml
+# ^ That doesn't exist. But you already knew that.
