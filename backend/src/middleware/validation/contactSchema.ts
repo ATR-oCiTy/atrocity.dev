@@ -1,11 +1,32 @@
 import { z } from 'zod';
 
+const escapeHtml = (str: string) => {
+  return str.replace(/[&<>'"]/g, 
+    tag => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[tag as keyof typeof escapeMap] || tag)
+  );
+};
+
+const escapeMap = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  "'": '&#39;',
+  '"': '&quot;'
+};
+
 export const contactSchema = z.object({
   name: z
     .string()
     .min(2, 'Name must be at least 2 characters')
     .max(100, 'Name must be under 100 characters')
-    .trim(),
+    .trim()
+    .transform(escapeHtml),
   email: z
     .string()
     .email('Invalid email address')
@@ -15,5 +36,6 @@ export const contactSchema = z.object({
     .string()
     .min(10, 'Message must be at least 10 characters')
     .max(2000, 'Message must be under 2000 characters')
-    .trim(),
+    .trim()
+    .transform(escapeHtml),
 });
