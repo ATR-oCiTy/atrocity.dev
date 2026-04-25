@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, ChevronRight, Briefcase, GraduationCap, Phone, MapPin, Code2, Terminal, X, Minus, Maximize2, Shield } from 'lucide-react';
+import { ChevronRight, Briefcase, GraduationCap, MapPin, Code2, Terminal, X, Minus, Maximize2, Shield } from 'lucide-react';
 import { useMousePosition } from './hooks/useMousePosition';
 import { usePortfolioData } from './hooks/usePortfolioData';
 import { useContactForm } from './hooks/useContactForm';
