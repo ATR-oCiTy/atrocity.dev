@@ -14,6 +14,9 @@ import { seedDatabase } from './seed';
 
 const app = express();
 
+// Trust the Nginx reverse proxy so rate limiting uses the real client IP, not the Nginx container IP
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(cors());
 app.use(helmet());
