@@ -74,8 +74,46 @@ export const TerminalNav = ({ onCommand, activeSection, onMeltdown, onBreach }: 
   const [hackMode, setHackMode] = useState(false);
   const [hackTarget, setHackTarget] = useState('');
   const [hackTimer, setHackTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const [isAiLoading, setIsAiLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const historyRef = useRef<HTMLDivElement>(null);
+  const workerRef = useRef<Worker | null>(null);
+
+  // Initialize AI Worker
+  useEffect(() => {
+    // We use a new URL to point to the worker file. Vite will handle the bundling.
+    const worker = new Worker(new URL('../workers/ai-worker.ts', import.meta.url), { type: 'module' });
+    
+    worker.onmessage = (e) => {
+      const { type, message, bestMatch, allScores } = e.data;
+      
+      if (type === 'status') {
+        if (message === 'NEURAL_PROCESSOR_READY') setIsAiLoading(false);
+        else setIsAiLoading(true);
+        console.log(`[AI_STATUS]: ${message}`);
+      } else if (type === 'thought') {
+        addHistory('', `[NEURAL_PROCESS_LOG]: ${message}`);
+      } else if (type === 'result') {
+        if (bestMatch && bestMatch.score > 0.35) {
+          addHistory('', `[DECISION]: Intent mapped to /${bestMatch.id} with ${(bestMatch.score * 100).toFixed(1)}% confidence.`);
+          const scoresList = allScores.slice(0, 3).map((s: any) => `/${s.id} (${(s.score * 100).toFixed(0)}%)`).join(' | ');
+          addHistory('', `[VECTOR_SPACE]: ${scoresList}`);
+          
+          // Execute navigation
+          onCommand(`cd /${bestMatch.id}`);
+          addHistory('', `Navigating to /${bestMatch.id}...`);
+        } else {
+          addHistory('', `[ERROR]: Intent ambiguity too high. Vector similarity below threshold (0.35).`, true);
+          addHistory('', `Try being more specific, e.g., "how can I hire you?" or "what tech do you use?".`);
+        }
+      }
+    };
+
+    worker.postMessage({ type: 'init' });
+    workerRef.current = worker;
+
+    return () => worker.terminate();
+  }, [onCommand]);
 
   useEffect(() => {
     if (historyRef.current) {
@@ -98,7 +136,7 @@ export const TerminalNav = ({ onCommand, activeSection, onMeltdown, onBreach }: 
     setHackMode(true);
     setHackTarget(target);
     addHistory('hack this', `[FIREWALL DETECTED] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Intercepting encrypted traffic...
+Interception encrypted traffic...
 Vulnerability found in sector 7G.
 \nTYPE THE BYPASS CODE TO BREACH: ▸ ${target} ◂\nYou have 10 seconds. GO.`, false);
 
@@ -114,6 +152,12 @@ Vulnerability found in sector 7G.
     const cmd = raw.trim();
     const cmdLower = cmd.toLowerCase();
     if (!cmd) return;
+
+    // Security: Input length limit for AI processing
+    if (cmd.length > 150) {
+      addHistory(raw, '⚠️  PAYLOAD TOO LARGE: Command exceeds safe buffer (150 chars).', true);
+      return;
+    }
 
     // Hack mode — check if they typed the right code
     if (hackMode) {
@@ -224,7 +268,16 @@ drwxr-xr-x  ashley  staff   education.dat
       const section = cmd.replace(/^(cd |goto |cat |ls |open )/, '').replace(/^\//, '');
       addHistory(raw, `Navigating to /${section}...`);
     } else {
-      addHistory(raw, `Command not found: "${raw}". Type 'help' for available commands.`, true);
+      // Command not found? Trigger AI Intent Engine
+      addHistory(raw, `[SYSTEM]: Command "${raw}" not recognized. Redirecting to Neural Intent Engine...`);
+      
+      if (isAiLoading) {
+        addHistory('', `[ERROR]: Neural Processor is still initializing weights. Please wait...`, true);
+      } else if (workerRef.current) {
+        workerRef.current.postMessage({ type: 'query', text: cmd });
+      } else {
+        addHistory('', `[ERROR]: AI Worker not initialized.`, true);
+      }
     }
   };
 
@@ -236,7 +289,7 @@ drwxr-xr-x  ashley  staff   education.dat
   };
 
   return (
-    <div className={`fixed bottom-0 left-0 right-0 z-[200] transition-all duration-300 ${isFocused ? 'h-52' : 'h-11'}`}>
+    <div className={`fixed bottom-0 left-0 right-0 z-[200] transition-all duration-300 ${isFocused ? 'h-64' : 'h-11'}`}>
       {isFocused && (
         <div ref={historyRef}
           className="bg-black/95 backdrop-blur-md border-t border-[#00ff41]/30 px-6 pt-3 pb-1 font-mono text-xs overflow-y-auto"
@@ -252,7 +305,7 @@ drwxr-xr-x  ashley  staff   education.dat
                   <span className="text-gray-300">{entry.input}</span>
                 </div>
               )}
-              <div className={entry.isError ? 'text-[#ff003c]' : 'text-gray-500'} style={{ whiteSpace: 'pre' }}>
+              <div className={entry.isError ? 'text-[#ff003c]' : entry.output.startsWith('[NEURAL') ? 'text-[#00f3ff]' : entry.output.startsWith('[DECISION') ? 'text-[#00ff41]' : 'text-gray-500'} style={{ whiteSpace: 'pre' }}>
                 {entry.output}
               </div>
             </div>
@@ -267,6 +320,13 @@ drwxr-xr-x  ashley  staff   education.dat
           <span className="text-[10px] font-mono text-[#333] uppercase tracking-widest">
             {hackMode ? 'HACK_MODE' : 'TERMINAL'}
           </span>
+          {isAiLoading && (
+            <div className="flex gap-1 ml-2">
+              <div className="w-1 h-1 bg-[#00f3ff] animate-bounce" style={{ animationDelay: '0ms' }} />
+              <div className="w-1 h-1 bg-[#00f3ff] animate-bounce" style={{ animationDelay: '150ms' }} />
+              <div className="w-1 h-1 bg-[#00f3ff] animate-bounce" style={{ animationDelay: '300ms' }} />
+            </div>
+          )}
         </div>
         <span className="text-[#00ff41] font-mono text-xs shrink-0">
           <span className="text-[#333]">visitor@sys</span>
@@ -279,10 +339,11 @@ drwxr-xr-x  ashley  staff   education.dat
           onKeyDown={handleKeyDown}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setTimeout(() => setIsFocused(false), 200)}
-          placeholder={isFocused ? '' : hackMode ? 'TYPE THE BYPASS CODE...' : "Type 'help' for commands..."}
+          placeholder={isFocused ? '' : isAiLoading ? 'INITIALIZING NEURAL ENGINE...' : hackMode ? 'TYPE THE BYPASS CODE...' : "Type 'help' or any natural language query..."}
           className={`flex-1 bg-transparent outline-none font-mono text-xs placeholder-[#222] ${hackMode ? 'text-[#ff003c] caret-[#ff003c]' : 'text-white caret-[#00ff41]'}`}
           autoComplete="off" spellCheck="false" />
       </div>
     </div>
   );
 };
+

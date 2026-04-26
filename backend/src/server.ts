@@ -22,7 +22,7 @@ app.set('trust proxy', 1);
 app.use(cors({
   origin: config.nodeEnv === 'production' 
     ? ['https://atrocity.dev', 'https://www.atrocity.dev'] 
-    : ['http://localhost:5173', 'http://localhost:3000'],
+    : [/^http:\/\/localhost(:\d+)?$/, /^http:\/\/127\.0\.0\.1(:\d+)?$/],
   methods: ['GET', 'POST'],
   credentials: true
 }));
