@@ -1,7 +1,9 @@
 import { pipeline, env } from '@xenova/transformers';
 
-// Skip local model check and use remote CDN (Hugging Face)
-env.allowLocalModels = false;
+// Configure for self-hosting models (Secure & Offline-ready)
+env.allowLocalModels = true;
+env.allowRemoteModels = false;
+env.localModelPath = '/models/'; // Path relative to public folder in Vite
 
 let extractor: any = null;
 

@@ -106,6 +106,7 @@ export const TerminalNav = ({ onCommand, activeSection, onMeltdown, onBreach }: 
       } else if (type === 'thought') {
         addHistory('', `[NEURAL_PROCESS_LOG]: ${message}`);
       } else if (type === 'result') {
+        setIsAiProcessing(false);
         if (bestMatch && bestMatch.score > 0.30) {
           addHistory('', `[DECISION]: Intent mapped to /${bestMatch.id} with ${(bestMatch.score * 100).toFixed(1)}% confidence.`);
           const scoresList = allScores.slice(0, 3).map((s: any) => `/${s.id} (${(s.score * 100).toFixed(0)}%)`).join(' | ');
@@ -278,15 +279,21 @@ drwxr-xr-x  ashley  staff   education.dat
       addHistory(raw, 'Wake up, Neo... The Matrix has you.\nFollow the white rabbit. 🐇\nTry the Konami code: ↑↑↓↓←→←→BA'); return;
     }
 
-    const navigated = onCommand(cmd);
     if (navigated) {
       const section = cmd.replace(/^(cd |goto |cat |ls |open )/, '').replace(/^\//, '');
       addHistory(raw, `Navigating to /${section}...`);
     } else {
+      if (isAiProcessing) {
+        addHistory('', `[ERROR]: Neural Processor is currently saturated. Please wait for the previous query to complete.`, true);
+        return;
+      }
+
       addHistory(raw, `[SYSTEM]: Command "${raw}" not recognized. Redirecting to Neural Intent Engine...`);
+      
       if (isAiLoading) {
         addHistory('', `[ERROR]: Neural Processor is still initializing weights. Please wait...`, true);
       } else if (workerRef.current) {
+        setIsAiProcessing(true);
         workerRef.current.postMessage({ type: 'query', text: cmd });
       } else {
         addHistory('', `[ERROR]: AI Worker not initialized.`, true);
@@ -351,9 +358,9 @@ drwxr-xr-x  ashley  staff   education.dat
       <div className="h-11 bg-black/95 backdrop-blur-md border-t border-[#00ff41]/20 px-6 flex items-center gap-3 cursor-text"
         onClick={() => inputRef.current?.focus()}>
         <div className="flex items-center gap-2 shrink-0">
-          <div className={`w-2 h-2 ${hackMode ? 'bg-[#ff003c] shadow-[0_0_6px_#ff003c] animate-pulse' : isFocused ? 'bg-[#00ff41] shadow-[0_0_6px_#00ff41]' : 'bg-[#333]'} transition-colors`} />
+          <div className={`w-2 h-2 ${hackMode ? 'bg-[#ff003c] shadow-[0_0_6px_#ff003c] animate-pulse' : isAiProcessing ? 'bg-[#fcee0a] shadow-[0_0_6px_#fcee0a] animate-pulse' : isFocused ? 'bg-[#00ff41] shadow-[0_0_6px_#00ff41]' : 'bg-[#333]'} transition-colors`} />
           <span className="text-[10px] font-mono text-[#333] uppercase tracking-widest">
-            {hackMode ? 'HACK_MODE' : 'TERMINAL'}
+            {hackMode ? 'HACK_MODE' : isAiProcessing ? 'THINKING' : 'TERMINAL'}
           </span>
           {isAiLoading && (
             <div className="flex gap-1 ml-2">
@@ -374,8 +381,9 @@ drwxr-xr-x  ashley  staff   education.dat
           onKeyDown={handleKeyDown}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setTimeout(() => setIsFocused(false), 200)}
-          placeholder={isFocused ? '' : isAiLoading ? 'INITIALIZING NEURAL ENGINE...' : hackMode ? 'TYPE THE BYPASS CODE...' : "Type 'help' or any natural language query..."}
-          className={`flex-1 bg-transparent outline-none font-mono text-xs placeholder-[#222] ${hackMode ? 'text-[#ff003c] caret-[#ff003c]' : 'text-white caret-[#00ff41]'}`}
+          placeholder={isFocused ? '' : isAiLoading ? 'INITIALIZING NEURAL ENGINE...' : isAiProcessing ? 'PROCESSING INTENT...' : hackMode ? 'TYPE THE BYPASS CODE...' : "Type 'help' or any natural language query..."}
+          className={`flex-1 bg-transparent outline-none font-mono text-xs placeholder-[#222] ${hackMode ? 'text-[#ff003c] caret-[#ff003c]' : isAiProcessing ? 'text-[#fcee0a]' : 'text-white caret-[#00ff41]'}`}
+          disabled={isAiProcessing}
           autoComplete="off" spellCheck="false" />
       </div>
     </div>
