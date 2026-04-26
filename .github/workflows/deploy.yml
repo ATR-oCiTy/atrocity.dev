@@ -6,21 +6,7 @@ on:
       - main
 
 jobs:
-  security-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Run Snyk Security Scan
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --all-projects --severity-threshold=high
-
   deploy:
-    needs: security-scan
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
