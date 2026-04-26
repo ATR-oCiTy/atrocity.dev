@@ -11,109 +11,92 @@
      /:/  /                      /:/  /       \:\__\        \:\__\        \:\__\        \:\__\|__|
      \/__/                       \/__/         \/__/         \/__/         \/__/         \/__/ 
                                                                                 
-                          // NEURAL_INTENT_ENGINE // ZERO_TRUST_INFRA //
+                    [SYSTEM_INIT] // NEURAL_INTENT_ENGINE // ZERO_TRUST_INFRA
 ```
 
 # ⚡ ATROCITY.DEV
 
-[![Infrastructure: Cloudflare](https://img.shields.io/badge/Network-Cloudflare_Protected-f38020?style=for-the-badge&logo=cloudflare)](https://www.cloudflare.com/)
+[![Infrastructure: Cloudflare](https://img.shields.io/badge/Network-Cloudflare_Edge-f38020?style=for-the-badge&logo=cloudflare)](https://www.cloudflare.com/)
 [![Cloud: GCP](https://img.shields.io/badge/Cloud-GCP_Zero--Trust-4285F4?style=for-the-badge&logo=google-cloud)](https://cloud.google.com/)
 [![Security: Hardened](https://img.shields.io/badge/Security-OWASP_Hardened-ff003c?style=for-the-badge&logo=owasp)](https://owasp.org/)
 
-> **SYSTEM_STATUS:** `[OPERATIONAL]`  
-> **THREAT_LEVEL:** `[ELEVATED]`  
-> **CLASSIFICATION:** `[TOP_SECRET]`
+> **"Welcome to the system. Try not to break anything. Actually, do. That's why I built it."**
 
-Atrocity.dev is not just a portfolio. It is a **hardened agentic sandbox** built to demonstrate the convergence of **Offensive Security** and **Edge-AI**. It features a zero-open-port architecture and a custom-built neural intent engine running entirely in the client-side sandbox.
+Atrocity.dev isn't your average "Hire Me" portfolio. It's a battle-hardened digital dossier designed with a red-team mindset. I'm a Cybersecurity student with a deep AI obsession, and this is where those two worlds collide in a high-performance, edge-accelerated explosion.
 
 ---
 
 ## 🛰 NEURAL INTENT ENGINE (V2)
 
-The core of the Atrocity terminal is a **Self-Hosted Neural Processor** built with `Transformers.js`. 
+![Neural Engine Banner](frontend/public/assets/neural_engine_banner.png)
 
-- **Local Inference:** Runs a quantized `all-MiniLM-L6-v2` model directly in a **Web Worker**.
-- **Privacy Hardened:** `connect-src 'self'` ensures 0% of your data ever leaves the browser.
-- **Semantic Mapping:** Maps natural language queries to site commands with vector similarity scoring.
-- **WASM Acceleration:** Secured via `wasm-unsafe-eval` for near-native inference speeds without compromising standard XSS protections.
+Stop clicking buttons like a script-kiddie. My terminal features a **Self-Hosted Neural Processor** built with `Transformers.js`. 
+
+- **Edge Intelligence:** Runs a quantized `all-MiniLM-L6-v2` model directly in your browser.
+- **Web Worker Sandbox:** Off-thread inference ensures the UI stays at a silky 60fps while the weights are crunching.
+- **Secure WASM:** Leveraging `wasm-unsafe-eval` for near-native performance while keeping the CSP tighter than a drum.
+- **No-Leads Policy:** 100% client-side. No API keys, no tracking, no external CDN dependencies. Just raw neural power.
 
 ```mermaid
 graph LR
-    A[Natural Language] --> B{Neural Worker}
-    B --> C[(Local Weights)]
-    C --> D[Cosine Similarity]
-    D --> E{Decision Log}
-    E -- Match > 0.30 --> F[Execute Command]
-    E -- Ambiguous --> G[Fallback System]
+    A[Natural Language Input] --> B{AI Worker Thread}
+    B --> C[(Local ONNX Weights)]
+    C --> D[Semantic Embedding]
+    D --> E[Cosine Similarity]
+    E -- Match > 0.30 --> F[Execute Navigation]
+    E -- Low Confidence --> G[Error Handling]
 ```
 
 ---
 
-## 🛡 INFRASTRUCTURE & ZERO-TRUST DEVOPS
+## 🛡 THE ZERO-TRUST ARCHITECTURE
 
-Built on the principle of "Assume Breach," the underlying infrastructure is invisible and unreachable from the public internet.
+![Security Infra Banner](frontend/public/assets/security_infra_banner.png)
 
-### 🌐 The Edge
-- **Cloudflare Proxying:** Full SSL/TLS encryption, WAF protection, and edge caching.
-- **Regex CORS Hardening:** Dynamic origin validation for seamless local-to-prod development without sacrificing security.
+Most sites are "Security through Obscurity." I prefer **Security through Paranoid Engineering.**
 
-### ☁️ The Core (GCP)
-- **Zero-Open-Ports:** The VM has **no public IP ingress**. 
-- **IAP Tunneling:** Remote administration and deployments occur strictly via **Identity-Aware Proxy (IAP)**.
-- **Keyless CI/CD:** Uses **Workload Identity Federation (WIF)** to authenticate GitHub Actions to GCP. No long-lived service account keys exist in the repository.
+### 🌪 The Edge (Cloudflare)
+The domain is fronted by **Cloudflare Edge**. We use it for more than just a proxy; it's our first line of defense.
+- **Edge Firewall:** WAF rules that eat bots for breakfast.
+- **SSL/TLS Hardening:** Zero-compromise encryption from the edge to the origin.
 
-### 📦 The Sandbox
-- **Multi-Stage Docker:** Minimized attack surface using `node:25-alpine`.
-- **Hardened Nginx:** Content Security Policy (CSP) designed to allow WASM while strictly forbidding standard JS `eval()` and unauthorized CDNs.
+### 🚇 The Tunnel (IAP + WIF)
+My production VM has **zero open ports** to the public internet. None. Nada. 
+- **Identity-Aware Proxy (IAP):** Access is strictly tunneled. If you aren't authenticated through my GCP IAM, you don't even see a login prompt.
+- **Workload Identity Federation (WIF):** My CI/CD pipeline is keyless. GitHub Actions "exchanges" a token with GCP to deploy. No long-lived service account keys = No keys for you to find in my logs.
 
 ---
 
-## 🕹 TERMINAL SANDBOX // EASTER EGGS
+## 🕹 TERMINAL COMMANDS // EASTER EGGS
 
-The terminal is a fully interactive shell with hidden functionalities for those who know where to look.
+You think you've seen the whole site? Type these in the terminal and see what happens.
 
-| Command | Payload |
-| :--- | :--- |
-| `man hire` | Displays the Ashley Thomas Roy implementation manual. |
-| `hack` | Initiates a cryptographic firewall bypass minigame. |
-| `breach` | Unlocks the Classified Dossier (Requires Level 5 Clearance). |
-| `matrix` | Initiates a system-wide neural override. |
-| `sudo rm -rf /` | **[CRITICAL]** Initiates a simulated system meltdown. |
-| `nmap localhost` | Scans internal container services. |
+| Command | Status | Description |
+| :--- | :--- | :--- |
+| `man hire` | `[READ_ONLY]` | Displays the Ashley Thomas Roy implementation manual. |
+| `hack` | `[ACTIVE]` | Initiates a cryptographic firewall bypass challenge. |
+| `breach` | `[CLASSIFIED]` | Unlocks the Dossier (Requires Level 5 Clearance). |
+| `sudo rm -rf /` | `[DANGER]` | Watch the system melt. Don't say I didn't warn you. |
+| `matrix` | `[OVERRIDE]` | Neural override of the site visuals. |
 
 ---
 
 ## 🛠 TECH MATRIX
 
-```text
-[FRONTEND] ----------------> React 18 // TypeScript // Framer Motion // Tailwind
-[AI_ENGINE] ---------------> Transformers.js v2 // ONNX Runtime // Web Workers
-[BACKEND] -----------------> Node.js 25 // Express // Mongoose // Zod
-[INFRA] -------------------> Docker // Nginx // Cloudflare // GCP Compute
-[PIPELINE] ----------------> GitHub Actions // WIF // IAP // Docker Hub
-```
-
----
-
-## 🚀 INSTALLATION
-
-```bash
-# Clone the repository
-git clone https://github.com/ATR-oCiTy/atrocity.dev.git
-
-# Initialize model weights (Self-Hosted AI)
-./scripts/download_models.sh
-
-# Spin up the containers
-docker compose up -d
-```
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend** | React 18, Vite, Framer Motion, TypeScript |
+| **Edge AI** | Transformers.js v2, ONNX Runtime, Web Workers |
+| **DevOps** | Docker (Alpine Node 25), GitHub Actions, WIF, IAP |
+| **Network** | Cloudflare Edge, Nginx (Hardened CSP, Gzip/Brotli) |
+| **Backend** | Express.js, MongoDB, Zod Validation, Regex-CORS |
 
 ---
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/ATR-oCiTy/atrocity.dev/main/frontend/public/favicon.svg" width="50" height="50" />
+  <img src="https://raw.githubusercontent.com/ATR-oCiTy/atrocity.dev/main/frontend/public/favicon.svg" width="60" height="60" />
   <br>
   <b>Constructed by Ashley Thomas Roy</b><br>
   <i>Cybersecurity Student // AI Researcher</i><br>
-  <code>// ASHLEY_TR_MEC_GMAIL_COM //</code>
+  <code>[STATUS: OPTIMIZED]</code>
 </p>
