@@ -106,14 +106,14 @@ export const TerminalNav = ({ onCommand, activeSection, onMeltdown, onBreach }: 
       } else if (type === 'thought') {
         addHistory('', `[NEURAL_PROCESS_LOG]: ${message}`);
       } else if (type === 'result') {
-        if (bestMatch && bestMatch.score > 0.35) {
+        if (bestMatch && bestMatch.score > 0.30) {
           addHistory('', `[DECISION]: Intent mapped to /${bestMatch.id} with ${(bestMatch.score * 100).toFixed(1)}% confidence.`);
           const scoresList = allScores.slice(0, 3).map((s: any) => `/${s.id} (${(s.score * 100).toFixed(0)}%)`).join(' | ');
           addHistory('', `[VECTOR_SPACE]: ${scoresList}`);
           onCommand(`cd /${bestMatch.id}`);
           addHistory('', `Navigating to /${bestMatch.id}...`);
         } else {
-          addHistory('', `[ERROR]: Intent ambiguity too high. Vector similarity below threshold (0.35).`, true);
+          addHistory('', `[ERROR]: Intent ambiguity too high. Vector similarity below threshold (0.30).`, true);
           addHistory('', `Try being more specific, e.g., "how can I hire you?" or "what tech do you use?".`);
         }
       }
