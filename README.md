@@ -94,9 +94,9 @@ You think you've seen the whole site? Type these in the terminal and see what ha
 ---
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/ATR-oCiTy/atrocity.dev/main/frontend/public/favicon.svg" width="60" height="60" />
+  <img src="https://raw.githubusercontent.com/ATR-oCiTy/atrocity.dev/main/frontend/public/favicon.png" width="60" height="60" />
   <br>
   <b>Constructed by Ashley Thomas Roy</b><br>
   <i>Cybersecurity Student // AI Researcher</i><br>
-  <code>[STATUS: OPTIMIZED]</code>
+  <code>// ATROCITY_INTEL_SYSTEMS //</code>
 </p>

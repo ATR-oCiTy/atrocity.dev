@@ -10,3 +10,11 @@ EASTER_EGGS.md
 __pycache__/
 backend/src/data/seed-data.json
 SECURITY.md
+
+# Agentic & IDE Metadata
+.vscode/
+.antigravity/
+.agents/
+.gemini/
+*.tmp
+.DS_Store
