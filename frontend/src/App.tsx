@@ -145,8 +145,8 @@ function App() {
                   : 'text-[#00f3ff] drop-shadow-[0_0_6px_rgba(0,243,255,0.6)]'
               }`}
             >
-              {redTeamMode ? 'RED' : 'SYS'}<span className="text-white">{redTeamMode ? '.TEAM' : '.ADMIN'}</span>
-              {redTeamMode && <span className="ml-2 text-[8px] text-[#ff003c] border border-[#ff003c] px-1 py-0.5 align-middle">RED_TEAM</span>}
+              {redTeamMode ? 'ATROCITY' : 'ATROCITY'}<span className="text-white">{redTeamMode ? '.RED' : '.SYS'}</span>
+              {redTeamMode && <span className="ml-2 text-[8px] text-[#ff003c] border border-[#ff003c] px-1 py-0.5 align-middle">RED_TEAM_ACTIVE</span>}
             </div>
 
             {/* Right-side window controls (decorative) */}
