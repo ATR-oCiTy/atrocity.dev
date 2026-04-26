@@ -70,6 +70,8 @@ Nmap done: 1 IP address (1 host up) scanned in 0.42 seconds`;
 export const TerminalNav = ({ onCommand, activeSection, onMeltdown, onBreach }: Props) => {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [commands, setCommands] = useState<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
   const [isFocused, setIsFocused] = useState(false);
   const [hackMode, setHackMode] = useState(false);
   const [hackTarget, setHackTarget] = useState('');
@@ -79,9 +81,20 @@ export const TerminalNav = ({ onCommand, activeSection, onMeltdown, onBreach }: 
   const historyRef = useRef<HTMLDivElement>(null);
   const workerRef = useRef<Worker | null>(null);
 
+  // Persistent History Load
+  useEffect(() => {
+    const saved = localStorage.getItem('terminal_commands');
+    if (saved) {
+      try {
+        setCommands(JSON.parse(saved));
+      } catch (e) {
+        console.error('Failed to load terminal history', e);
+      }
+    }
+  }, []);
+
   // Initialize AI Worker
   useEffect(() => {
-    // We use a new URL to point to the worker file. Vite will handle the bundling.
     const worker = new Worker(new URL('../workers/ai-worker.ts', import.meta.url), { type: 'module' });
     
     worker.onmessage = (e) => {
@@ -90,7 +103,6 @@ export const TerminalNav = ({ onCommand, activeSection, onMeltdown, onBreach }: 
       if (type === 'status') {
         if (message === 'NEURAL_PROCESSOR_READY') setIsAiLoading(false);
         else setIsAiLoading(true);
-        console.log(`[AI_STATUS]: ${message}`);
       } else if (type === 'thought') {
         addHistory('', `[NEURAL_PROCESS_LOG]: ${message}`);
       } else if (type === 'result') {
@@ -98,8 +110,6 @@ export const TerminalNav = ({ onCommand, activeSection, onMeltdown, onBreach }: 
           addHistory('', `[DECISION]: Intent mapped to /${bestMatch.id} with ${(bestMatch.score * 100).toFixed(1)}% confidence.`);
           const scoresList = allScores.slice(0, 3).map((s: any) => `/${s.id} (${(s.score * 100).toFixed(0)}%)`).join(' | ');
           addHistory('', `[VECTOR_SPACE]: ${scoresList}`);
-          
-          // Execute navigation
           onCommand(`cd /${bestMatch.id}`);
           addHistory('', `Navigating to /${bestMatch.id}...`);
         } else {
@@ -111,7 +121,6 @@ export const TerminalNav = ({ onCommand, activeSection, onMeltdown, onBreach }: 
 
     worker.postMessage({ type: 'init' });
     workerRef.current = worker;
-
     return () => worker.terminate();
   }, [onCommand]);
 
@@ -121,7 +130,6 @@ export const TerminalNav = ({ onCommand, activeSection, onMeltdown, onBreach }: 
     }
   }, [history]);
 
-  // Cleanup hack timer
   useEffect(() => {
     return () => { if (hackTimer) clearTimeout(hackTimer); };
   }, [hackTimer]);
@@ -153,13 +161,17 @@ Vulnerability found in sector 7G.
     const cmdLower = cmd.toLowerCase();
     if (!cmd) return;
 
-    // Security: Input length limit for AI processing
+    // Save to persistence
+    const updatedCommands = [cmd, ...commands.filter(c => c !== cmd)].slice(0, 50);
+    setCommands(updatedCommands);
+    setHistoryIndex(-1);
+    localStorage.setItem('terminal_commands', JSON.stringify(updatedCommands));
+
     if (cmd.length > 150) {
       addHistory(raw, '⚠️  PAYLOAD TOO LARGE: Command exceeds safe buffer (150 chars).', true);
       return;
     }
 
-    // Hack mode — check if they typed the right code
     if (hackMode) {
       if (cmd.toUpperCase() === hackTarget) {
         if (hackTimer) clearTimeout(hackTimer);
@@ -180,7 +192,6 @@ Encryption: NEUTRALIZED
       return;
     }
 
-    // Easter egg commands
     if (cmdLower === 'help' || cmdLower === '?') {
       addHistory(raw, HELP_TEXT); return;
     }
@@ -230,6 +241,11 @@ Unlocking dossier...`);
       setTimeout(() => onBreach(), 1500);
       return;
     }
+    if (cmdLower === 'ai-recon' || cmdLower === 'ai') {
+      addHistory(raw, '📡 INITIATING NEURAL NETWORK AUDIT...');
+      // onAiRecon was removed but keeping logic here just in case for AI intent
+      return;
+    }
     if (cmdLower === 'ls' || cmdLower === 'ls -la') {
       addHistory(raw, `total 42
 drwxr-xr-x  ashley  staff   skills.json
@@ -262,15 +278,12 @@ drwxr-xr-x  ashley  staff   education.dat
       addHistory(raw, 'Wake up, Neo... The Matrix has you.\nFollow the white rabbit. 🐇\nTry the Konami code: ↑↑↓↓←→←→BA'); return;
     }
 
-    // Navigation commands
     const navigated = onCommand(cmd);
     if (navigated) {
       const section = cmd.replace(/^(cd |goto |cat |ls |open )/, '').replace(/^\//, '');
       addHistory(raw, `Navigating to /${section}...`);
     } else {
-      // Command not found? Trigger AI Intent Engine
       addHistory(raw, `[SYSTEM]: Command "${raw}" not recognized. Redirecting to Neural Intent Engine...`);
-      
       if (isAiLoading) {
         addHistory('', `[ERROR]: Neural Processor is still initializing weights. Please wait...`, true);
       } else if (workerRef.current) {
@@ -285,6 +298,28 @@ drwxr-xr-x  ashley  staff   education.dat
     if (e.key === 'Enter') {
       processCommand(input);
       setInput('');
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      const nextIndex = historyIndex + 1;
+      if (nextIndex < commands.length) {
+        setHistoryIndex(nextIndex);
+        setInput(commands[nextIndex]);
+      }
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      const nextIndex = historyIndex - 1;
+      if (nextIndex >= 0) {
+        setHistoryIndex(nextIndex);
+        setInput(commands[nextIndex]);
+      } else {
+        setHistoryIndex(-1);
+        setInput('');
+      }
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      const possible = ['cd /home', 'cd /skills', 'cd /experience', 'cd /education', 'cd /contact', 'help', 'clear', 'whoami', 'man hire', 'nmap localhost', 'ping ashley', 'hack', 'matrix', 'ls', 'ls -la', 'breach'];
+      const match = possible.find(c => c.startsWith(input.toLowerCase()));
+      if (match) setInput(match);
     }
   };
 
