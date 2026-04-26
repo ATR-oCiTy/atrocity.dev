@@ -1,87 +1,119 @@
-# ⚡ ATROCITY.DEV // NEURAL_SEC_ENGINE
+```text
+      ___           ___           ___           ___           ___           ___           ___     
+     /\  \         /\  \         /\  \         /\  \         /\  \         /\  \         /\  \    
+    /::\  \        \:\  \       /::\  \       /::\  \       /::\  \       /::\  \       /::\  \   
+   /:/\:\  \        \:\  \     /:/\:\  \     /:/\:\  \     /:/\:\  \     /:/\:\  \     /:/\:\  \  
+  /::\~\:\  \       /::\  \   /::\~\:\  \   /:/  \:\  \   /:/  \:\  \   /:/  \:\  \   /:/  \:\__\ 
+ /:/\:\ \:\__\     /:/\:\__\ /:/\:\ \:\__\ /:/__/ \:\__\ /:/__/ \:\__\ /:/__/ \:\__\ /:/__/ \:|__|
+ \/__\:\/:/  /    /:/  \/__/ \/__\:\/:/  / \:\  \  \/__/ \:\  \  \/__/ \:\  \  \/__/ \:\  \  /|  |
+      \::/  /    /:/  /           \::/  /   \:\  \        \:\  \        \:\  \        \:\  \  |  |
+      /:/  /     \/__/            /:/  /     \:\  \        \:\  \        \:\  \        \:\  \ |  |
+     /:/  /                      /:/  /       \:\__\        \:\__\        \:\__\        \:\__\|__|
+     \/__/                       \/__/         \/__/         \/__/         \/__/         \/__/ 
+                                                                                
+                          // NEURAL_INTENT_ENGINE // ZERO_TRUST_INFRA //
+```
 
-[![Architecture: Zero-Trust](https://img.shields.io/badge/Architecture-Zero--Trust-00ff41?style=for-the-badge&logo=google-cloud)](https://cloud.google.com/)
-[![Engine: Transformers.js](https://img.shields.io/badge/Engine-Transformers.js-fcee0a?style=for-the-badge&logo=huggingface)](https://huggingface.co/)
-[![Sec: OWASP_Hardened](https://img.shields.io/badge/Security-OWASP_Hardened-ff003c?style=for-the-badge&logo=owasp)](https://owasp.org/)
+# ⚡ ATROCITY.DEV
 
-> **Status: [ACTIVE]**  
-> **Classification: REDACTED**  
-> **System: Agentic AI Portfolio & Cybersecurity Sandbox**
+[![Infrastructure: Cloudflare](https://img.shields.io/badge/Network-Cloudflare_Protected-f38020?style=for-the-badge&logo=cloudflare)](https://www.cloudflare.com/)
+[![Cloud: GCP](https://img.shields.io/badge/Cloud-GCP_Zero--Trust-4285F4?style=for-the-badge&logo=google-cloud)](https://cloud.google.com/)
+[![Security: Hardened](https://img.shields.io/badge/Security-OWASP_Hardened-ff003c?style=for-the-badge&logo=owasp)](https://owasp.org/)
 
-A high-performance, hardened digital dossier and terminal interface built for the intersection of Offensive Security and Agentic AI. 
+> **SYSTEM_STATUS:** `[OPERATIONAL]`  
+> **THREAT_LEVEL:** `[ELEVATED]`  
+> **CLASSIFICATION:** `[TOP_SECRET]`
+
+Atrocity.dev is not just a portfolio. It is a **hardened agentic sandbox** built to demonstrate the convergence of **Offensive Security** and **Edge-AI**. It features a zero-open-port architecture and a custom-built neural intent engine running entirely in the client-side sandbox.
 
 ---
 
-## 🛰 NEURAL INTENT ENGINE (EDGE AI)
+## 🛰 NEURAL INTENT ENGINE (V2)
 
-Unlike standard portfolios, Atrocity features a **Self-Hosted Neural Intent Engine** running directly in your browser.
+The core of the Atrocity terminal is a **Self-Hosted Neural Processor** built with `Transformers.js`. 
 
-- **Transformers.js (v2):** Local inference using a quantized `all-MiniLM-L6-v2` model.
-- **Privacy-First:** 100% of the NLP processing happens on the client-side via Web Workers. No tracking, no external CDN dependencies.
-- **Vector Mapping:** Semantic command discovery with a confidence-weighted decision logic.
+- **Local Inference:** Runs a quantized `all-MiniLM-L6-v2` model directly in a **Web Worker**.
+- **Privacy Hardened:** `connect-src 'self'` ensures 0% of your data ever leaves the browser.
+- **Semantic Mapping:** Maps natural language queries to site commands with vector similarity scoring.
+- **WASM Acceleration:** Secured via `wasm-unsafe-eval` for near-native inference speeds without compromising standard XSS protections.
 
 ```mermaid
-graph TD
-    User([User Input]) --> UI[Terminal UI]
-    UI --> Worker{Web Worker}
-    Worker --> LocalWeights[(Local ONNX Weights)]
-    LocalWeights --> Sim[Cosine Similarity]
-    Sim --> Decision{Confidence > 0.30?}
-    Decision -- Yes --> Nav[Navigate to Section]
-    Decision -- No --> Error[Retry / Suggest]
+graph LR
+    A[Natural Language] --> B{Neural Worker}
+    B --> C[(Local Weights)]
+    C --> D[Cosine Similarity]
+    D --> E{Decision Log}
+    E -- Match > 0.30 --> F[Execute Command]
+    E -- Ambiguous --> G[Fallback System]
 ```
 
 ---
 
-## 🛡 SECURITY ARCHITECTURE
+## 🛡 INFRASTRUCTURE & ZERO-TRUST DEVOPS
 
-The infrastructure is designed with a **Red-Team Mindset**, assuming breach at the edge and protecting the core.
+Built on the principle of "Assume Breach," the underlying infrastructure is invisible and unreachable from the public internet.
 
-### Infrastructure Highlights:
-- **Zero-Trust Deployment:** Workload Identity Federation (WIF) eliminates long-lived GCP keys.
-- **IAP Tunneling:** Production VM has **zero open ports** to the public internet; deployment happens via Identity-Aware Proxy (IAP).
-- **Hardened CSP:** Granular `wasm-unsafe-eval` policy for secure AI execution without opening traditional XSS vectors.
-- **Docker Isolation:** Multi-stage builds using `node:alpine` images to minimize attack surface and patch vulnerabilities.
+### 🌐 The Edge
+- **Cloudflare Proxying:** Full SSL/TLS encryption, WAF protection, and edge caching.
+- **Regex CORS Hardening:** Dynamic origin validation for seamless local-to-prod development without sacrificing security.
 
-### Terminal Sandbox:
-The terminal isn't just a UI; it's a simulated environment with:
-- `hack`: A cryptographic bypass minigame.
-- `ls -la`: Hidden system logs and classified dossiers.
-- `sudo rm -rf /`: Don't try this unless you want to see the system melt down.
+### ☁️ The Core (GCP)
+- **Zero-Open-Ports:** The VM has **no public IP ingress**. 
+- **IAP Tunneling:** Remote administration and deployments occur strictly via **Identity-Aware Proxy (IAP)**.
+- **Keyless CI/CD:** Uses **Workload Identity Federation (WIF)** to authenticate GitHub Actions to GCP. No long-lived service account keys exist in the repository.
+
+### 📦 The Sandbox
+- **Multi-Stage Docker:** Minimized attack surface using `node:25-alpine`.
+- **Hardened Nginx:** Content Security Policy (CSP) designed to allow WASM while strictly forbidding standard JS `eval()` and unauthorized CDNs.
 
 ---
 
-## 🛠 TECH STACK
+## 🕹 TERMINAL SANDBOX // EASTER EGGS
 
-| Layer | Technologies |
+The terminal is a fully interactive shell with hidden functionalities for those who know where to look.
+
+| Command | Payload |
 | :--- | :--- |
-| **Frontend** | React 18, Vite, Framer Motion, TailwindCSS |
-| **Edge AI** | Transformers.js, ONNX Runtime, Web Workers |
-| **Backend** | Node.js, Express, TypeScript, MongoDB |
-| **DevOps** | Docker, Docker Compose, GitHub Actions |
-| **Cloud** | GCP (Compute Engine, IAP, Artifact Registry) |
-| **Security** | Zod Validation, HSTS, Secure CSP, WIF |
+| `man hire` | Displays the Ashley Thomas Roy implementation manual. |
+| `hack` | Initiates a cryptographic firewall bypass minigame. |
+| `breach` | Unlocks the Classified Dossier (Requires Level 5 Clearance). |
+| `matrix` | Initiates a system-wide neural override. |
+| `sudo rm -rf /` | **[CRITICAL]** Initiates a simulated system meltdown. |
+| `nmap localhost` | Scans internal container services. |
 
 ---
 
-## 🚀 LOCAL DEPLOYMENT
+## 🛠 TECH MATRIX
+
+```text
+[FRONTEND] ----------------> React 18 // TypeScript // Framer Motion // Tailwind
+[AI_ENGINE] ---------------> Transformers.js v2 // ONNX Runtime // Web Workers
+[BACKEND] -----------------> Node.js 25 // Express // Mongoose // Zod
+[INFRA] -------------------> Docker // Nginx // Cloudflare // GCP Compute
+[PIPELINE] ----------------> GitHub Actions // WIF // IAP // Docker Hub
+```
+
+---
+
+## 🚀 INSTALLATION
 
 ```bash
 # Clone the repository
 git clone https://github.com/ATR-oCiTy/atrocity.dev.git
 
-# Install dependencies
-npm run install:all
+# Initialize model weights (Self-Hosted AI)
+./scripts/download_models.sh
 
-# Launch the neural processor
-npm run dev
+# Spin up the containers
+docker compose up -d
 ```
 
 ---
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/ATR-oCiTy/atrocity.dev/main/frontend/public/favicon.svg" width="40" height="40" />
+  <img src="https://raw.githubusercontent.com/ATR-oCiTy/atrocity.dev/main/frontend/public/favicon.svg" width="50" height="50" />
   <br>
   <b>Constructed by Ashley Thomas Roy</b><br>
-  <i>Cybersecurity Student // AI Researcher</i>
+  <i>Cybersecurity Student // AI Researcher</i><br>
+  <code>// ASHLEY_TR_MEC_GMAIL_COM //</code>
 </p>
