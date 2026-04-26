@@ -4,7 +4,12 @@ on:
   push:
     branches:
       - main
-
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+      - 'docker-compose.yml'
+      - 'nginx.conf'
+      - '.github/workflows/deploy.yml'
 jobs:
   deploy:
     runs-on: ubuntu-latest
