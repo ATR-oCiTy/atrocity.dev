@@ -77,6 +77,7 @@ export const TerminalNav = ({ onCommand, activeSection, onMeltdown, onBreach }: 
   const [hackTarget, setHackTarget] = useState('');
   const [hackTimer, setHackTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
   const [isAiLoading, setIsAiLoading] = useState(false);
+  const [isAiProcessing, setIsAiProcessing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const historyRef = useRef<HTMLDivElement>(null);
   const workerRef = useRef<Worker | null>(null);
@@ -279,6 +280,8 @@ drwxr-xr-x  ashley  staff   education.dat
       addHistory(raw, 'Wake up, Neo... The Matrix has you.\nFollow the white rabbit. 🐇\nTry the Konami code: ↑↑↓↓←→←→BA'); return;
     }
 
+    // Navigation commands
+    const navigated = onCommand(cmd);
     if (navigated) {
       const section = cmd.replace(/^(cd |goto |cat |ls |open )/, '').replace(/^\//, '');
       addHistory(raw, `Navigating to /${section}...`);
