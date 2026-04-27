@@ -9,7 +9,7 @@
     "build": "tsc && cp -r src/data dist/data",
     "seed": "SEED_FORCE=true node dist/run-seed.js",
     "test": "npm run build && node --test test",
-    "test:coverage": "npm run build && node --test --experimental-test-coverage test"
+    "test:coverage": "npm run build && c8 --all --reporter=text --reporter=html --include=dist/controllers/**/*.js --include=dist/middleware/**/*.js --include=dist/services/**/*.js --exclude=dist/**/*.d.ts --check-coverage --lines 90 --branches 90 --functions 90 --statements 90 node --test test"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +29,7 @@
     "@types/express": "^5.0.6",
     "@types/node": "^25.6.0",
     "@types/nodemailer": "^8.0.0",
+    "c8": "^11.0.0",
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3"
