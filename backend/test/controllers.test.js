@@ -161,7 +161,7 @@ test('submitContact persists contact, sends notification, and returns 201', asyn
     sentPayloads.push(payload);
   };
 
-  const req = { body: { name: 'Ash', email: 'ash@example.com', message: 'hello world message' } };
+  const req = { body: { name: 'Test User', email: 'test.user@example.com', message: 'This is a successful contact submission test message.' } };
   const res = makeRes();
   let nextArg;
   await submitContact(req, res, (err) => {
@@ -172,9 +172,9 @@ test('submitContact persists contact, sends notification, and returns 201', asyn
   assert.deepEqual(createdPayloads, [req.body]);
   assert.deepEqual(sentPayloads, [
     {
-      senderName: 'Ash',
-      senderEmail: 'ash@example.com',
-      message: 'hello world message',
+      senderName: 'Test User',
+      senderEmail: 'test.user@example.com',
+      message: 'This is a successful contact submission test message.',
     },
   ]);
   assert.equal(res.out.statusCode, 201);
@@ -197,7 +197,7 @@ test('submitContact reports DB errors via next', async () => {
     sendCalled = true;
   };
 
-  const req = { body: { name: 'Ash', email: 'ash@example.com', message: 'hello world message' } };
+  const req = { body: { name: 'DB Failure User', email: 'db.failure@example.com', message: 'This message validates database failure handling.' } };
   const res = makeRes();
   let nextArg;
   await submitContact(req, res, (err) => {
@@ -225,7 +225,7 @@ test('submitContact keeps success response even when notification promise reject
     logged.push(args.join(' '));
   };
 
-  const req = { body: { name: 'Ash', email: 'ash@example.com', message: 'hello world message' } };
+  const req = { body: { name: 'Notification Failure User', email: 'notify.failure@example.com', message: 'This message validates notification failure fallback behavior.' } };
   const res = makeRes();
   let nextArg;
   await submitContact(req, res, (err) => {
