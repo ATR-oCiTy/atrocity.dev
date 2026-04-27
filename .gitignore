@@ -4,6 +4,8 @@ node_modules/
 !.env.example
 dist/
 build/
+coverage/
+frontend/coverage/
 .DS_Store
 EASTER_EGGS.md
 .venv/
