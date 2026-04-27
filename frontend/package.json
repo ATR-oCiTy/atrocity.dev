@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "download-models": "node scripts/download_models.mjs",
+    "prebuild": "npm run download-models",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"

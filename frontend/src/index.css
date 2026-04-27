@@ -62,9 +62,14 @@
 }
 
 /* ═══════════════════════════════════════════
-   CARD STACK NAV — hide body scroll, 
-   enable per-card inner scroll
+   GLOBAL SCALING BASE
+   Fluid base font size that scales with viewport width.
+   This makes rem-based layouts proportional on 1440p+ screens.
    ═══════════════════════════════════════════ */
+html {
+  font-size: clamp(14px, 1.1vw, 20px);
+}
+
 html, body {
   overflow: hidden;
   height: 100%;
@@ -72,6 +77,19 @@ html, body {
 
 #root {
   height: 100%;
+}
+
+/* ═══════════════════════════════════════════
+   UTILITIES
+   ═══════════════════════════════════════════ */
+
+/* Hide scrollbar but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Each card gets its own inner scrollbar — styled cyberpunk */
