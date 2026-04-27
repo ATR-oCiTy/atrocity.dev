@@ -1,0 +1,24 @@
+{
+  "all": true,
+  "src": [
+    "src"
+  ],
+  "reporter": [
+    "text",
+    "html"
+  ],
+  "exclude-after-remap": true,
+  "include": [
+    "src/controllers/**/*.ts",
+    "src/middleware/**/*.ts",
+    "src/services/**/*.ts"
+  ],
+  "exclude": [
+    "src/middleware/validation/contactSchema.ts"
+  ],
+  "check-coverage": true,
+  "lines": 90,
+  "branches": 90,
+  "functions": 90,
+  "statements": 90
+}
