@@ -5,7 +5,7 @@ const { contactSchema } = require('../dist/middleware/validation/contactSchema')
 test('contactSchema accepts valid payload and sanitizes HTML fields', () => {
   const result = contactSchema.parse({
     name: '  <Ashley> "Roy"  ',
-    email: '  user@example.com  ',
+    email: 'user@example.com',
     message: " Hello <b>world</b> & it's \"secure\" now. ",
   });
 

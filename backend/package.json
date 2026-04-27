@@ -8,8 +8,8 @@
     "dev": "nodemon src/server.ts",
     "build": "tsc && cp -r src/data dist/data",
     "seed": "SEED_FORCE=true node dist/run-seed.js",
-    "test": "npm run build && node --test test/**/*.test.js",
-    "test:coverage": "npm run build && node --test --experimental-test-coverage test/**/*.test.js"
+    "test": "npm run build && node --test test",
+    "test:coverage": "npm run build && node --test --experimental-test-coverage test"
   },
   "keywords": [],
   "author": "",
