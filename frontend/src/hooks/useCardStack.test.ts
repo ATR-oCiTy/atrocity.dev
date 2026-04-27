@@ -31,10 +31,14 @@ describe('useCardStack', () => {
   it('supports command navigation aliases', () => {
     const { result } = renderHook(() => useCardStack());
 
-    expect(result.current.navigateByCommand('cd /skills')).toBe(true);
+    act(() => {
+      expect(result.current.navigateByCommand('cd /skills')).toBe(true);
+    });
     expect(result.current.activeIndex).toBe(1);
 
-    expect(result.current.navigateByCommand('open training_data')).toBe(true);
+    act(() => {
+      expect(result.current.navigateByCommand('open training_data')).toBe(true);
+    });
     expect(result.current.activeIndex).toBe(3);
 
     expect(result.current.navigateByCommand('unknown')).toBe(false);

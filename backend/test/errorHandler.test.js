@@ -67,3 +67,28 @@ test('errorHandler returns explicit status/message outside masked case', () => {
   console.error = originalError;
   process.env.NODE_ENV = originalNodeEnv;
 });
+
+test('errorHandler falls back when error has no message', () => {
+  const originalNodeEnv = process.env.NODE_ENV;
+  process.env.NODE_ENV = 'development';
+  const originalError = console.error;
+  console.error = () => {};
+
+  const req = { method: 'GET', path: '/health' };
+  const res = makeRes();
+  const err = { statusCode: 500 };
+
+  errorHandler(err, req, res, () => {});
+
+  assert.equal(res.out.statusCode, 500);
+  assert.deepEqual(res.out.body, {
+    error: {
+      message: 'Internal Server Error',
+      status: 500,
+      path: '/health',
+    },
+  });
+
+  console.error = originalError;
+  process.env.NODE_ENV = originalNodeEnv;
+});
