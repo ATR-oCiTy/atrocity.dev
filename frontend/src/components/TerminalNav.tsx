@@ -76,10 +76,8 @@ export const TerminalNav = ({ onCommand, activeSection, onMeltdown, onBreach }: 
   const [hackMode, setHackMode] = useState(false);
   const [hackTarget, setHackTarget] = useState('');
   const [hackTimer, setHackTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
-  const [isAiLoading, setIsAiLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const historyRef = useRef<HTMLDivElement>(null);
-  const workerRef = useRef<Worker | null>(null);
 
   // Persistent History Load
   useEffect(() => {
@@ -92,38 +90,6 @@ export const TerminalNav = ({ onCommand, activeSection, onMeltdown, onBreach }: 
       }
     }
   }, []);
-
-  // Initialize AI Worker
-  useEffect(() => {
-    const worker = new Worker(new URL('../workers/ai-worker.ts', import.meta.url), { type: 'module' });
-    
-    worker.onmessage = (e) => {
-      const { type, message, bestMatch, allScores } = e.data;
-      
-      if (type === 'status') {
-        if (message === 'NEURAL_PROCESSOR_READY') setIsAiLoading(false);
-        else setIsAiLoading(true);
-      } else if (type === 'thought') {
-        addHistory('', `[NEURAL_PROCESS_LOG]: ${message}`);
-      } else if (type === 'result') {
-        setIsAiProcessing(false);
-        if (bestMatch && bestMatch.score > 0.30) {
-          addHistory('', `[DECISION]: Intent mapped to /${bestMatch.id} with ${(bestMatch.score * 100).toFixed(1)}% confidence.`);
-          const scoresList = allScores.slice(0, 3).map((s: any) => `/${s.id} (${(s.score * 100).toFixed(0)}%)`).join(' | ');
-          addHistory('', `[VECTOR_SPACE]: ${scoresList}`);
-          onCommand(`cd /${bestMatch.id}`);
-          addHistory('', `Navigating to /${bestMatch.id}...`);
-        } else {
-          addHistory('', `[ERROR]: Intent ambiguity too high. Vector similarity below threshold (0.30).`, true);
-          addHistory('', `Try being more specific, e.g., "how can I hire you?" or "what tech do you use?".`);
-        }
-      }
-    };
-
-    worker.postMessage({ type: 'init' });
-    workerRef.current = worker;
-    return () => worker.terminate();
-  }, [onCommand]);
 
   useEffect(() => {
     if (historyRef.current) {
@@ -242,11 +208,6 @@ Unlocking dossier...`);
       setTimeout(() => onBreach(), 1500);
       return;
     }
-    if (cmdLower === 'ai-recon' || cmdLower === 'ai') {
-      addHistory(raw, '📡 INITIATING NEURAL NETWORK AUDIT...');
-      // onAiRecon was removed but keeping logic here just in case for AI intent
-      return;
-    }
     if (cmdLower === 'ls' || cmdLower === 'ls -la') {
       addHistory(raw, `total 42
 drwxr-xr-x  ashley  staff   skills.json
@@ -279,25 +240,12 @@ drwxr-xr-x  ashley  staff   education.dat
       addHistory(raw, 'Wake up, Neo... The Matrix has you.\nFollow the white rabbit. 🐇\nTry the Konami code: ↑↑↓↓←→←→BA'); return;
     }
 
+    const navigated = onCommand(cmd);
     if (navigated) {
       const section = cmd.replace(/^(cd |goto |cat |ls |open )/, '').replace(/^\//, '');
       addHistory(raw, `Navigating to /${section}...`);
     } else {
-      if (isAiProcessing) {
-        addHistory('', `[ERROR]: Neural Processor is currently saturated. Please wait for the previous query to complete.`, true);
-        return;
-      }
-
-      addHistory(raw, `[SYSTEM]: Command "${raw}" not recognized. Redirecting to Neural Intent Engine...`);
-      
-      if (isAiLoading) {
-        addHistory('', `[ERROR]: Neural Processor is still initializing weights. Please wait...`, true);
-      } else if (workerRef.current) {
-        setIsAiProcessing(true);
-        workerRef.current.postMessage({ type: 'query', text: cmd });
-      } else {
-        addHistory('', `[ERROR]: AI Worker not initialized.`, true);
-      }
+      addHistory(raw, `[ERROR]: Command "${raw}" not recognized. Type 'help' for available commands.`, true);
     }
   };
 
