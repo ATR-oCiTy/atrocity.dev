@@ -8,7 +8,7 @@ const escapeHtml = (str: string) => {
       '>': '&gt;',
       "'": '&#39;',
       '"': '&quot;'
-    }[tag as keyof typeof escapeMap])
+    }[tag as keyof typeof escapeMap] || tag)
   );
 };
 
