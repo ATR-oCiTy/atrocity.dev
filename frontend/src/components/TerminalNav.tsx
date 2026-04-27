@@ -306,17 +306,10 @@ drwxr-xr-x  ashley  staff   education.dat
       <div className="h-11 bg-black/95 backdrop-blur-md border-t border-[#00ff41]/20 px-6 flex items-center gap-3 cursor-text"
         onClick={() => inputRef.current?.focus()}>
         <div className="flex items-center gap-2 shrink-0">
-          <div className={`w-2 h-2 ${hackMode ? 'bg-[#ff003c] shadow-[0_0_6px_#ff003c] animate-pulse' : isAiProcessing ? 'bg-[#fcee0a] shadow-[0_0_6px_#fcee0a] animate-pulse' : isFocused ? 'bg-[#00ff41] shadow-[0_0_6px_#00ff41]' : 'bg-[#333]'} transition-colors`} />
+          <div className={`w-2 h-2 ${hackMode ? 'bg-[#ff003c] shadow-[0_0_6px_#ff003c] animate-pulse' : isFocused ? 'bg-[#00ff41] shadow-[0_0_6px_#00ff41]' : 'bg-[#333]'} transition-colors`} />
           <span className="text-[10px] font-mono text-[#333] uppercase tracking-widest">
-            {hackMode ? 'HACK_MODE' : isAiProcessing ? 'THINKING' : 'TERMINAL'}
+            {hackMode ? 'HACK_MODE' : 'TERMINAL'}
           </span>
-          {isAiLoading && (
-            <div className="flex gap-1 ml-2">
-              <div className="w-1 h-1 bg-[#00f3ff] animate-bounce" style={{ animationDelay: '0ms' }} />
-              <div className="w-1 h-1 bg-[#00f3ff] animate-bounce" style={{ animationDelay: '150ms' }} />
-              <div className="w-1 h-1 bg-[#00f3ff] animate-bounce" style={{ animationDelay: '300ms' }} />
-            </div>
-          )}
         </div>
         <span className="text-[#00ff41] font-mono text-xs shrink-0">
           <span className="text-[#333]">visitor@sys</span>
@@ -329,9 +322,8 @@ drwxr-xr-x  ashley  staff   education.dat
           onKeyDown={handleKeyDown}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setTimeout(() => setIsFocused(false), 200)}
-          placeholder={isFocused ? '' : isAiLoading ? 'INITIALIZING NEURAL ENGINE...' : isAiProcessing ? 'PROCESSING INTENT...' : hackMode ? 'TYPE THE BYPASS CODE...' : "Type 'help' or any natural language query..."}
-          className={`flex-1 bg-transparent outline-none font-mono text-xs placeholder-[#222] ${hackMode ? 'text-[#ff003c] caret-[#ff003c]' : isAiProcessing ? 'text-[#fcee0a]' : 'text-white caret-[#00ff41]'}`}
-          disabled={isAiProcessing}
+          placeholder={isFocused ? '' : hackMode ? 'TYPE THE BYPASS CODE...' : "Type 'help' or 'cd /...'"}
+          className={`flex-1 bg-transparent outline-none font-mono text-xs placeholder-[#222] ${hackMode ? 'text-[#ff003c] caret-[#ff003c]' : 'text-white caret-[#00ff41]'}`}
           autoComplete="off" spellCheck="false" />
       </div>
     </div>
